@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+	<!-- Nodes to define target position based on computer vision algorithm -->
+	<node pkg="offboard_py" type="image_publish.py" name="image_publisher" required="True" output="screen">
+		<param name = "uav_id" value = "uav0"/>
+	</node>
+	<node pkg="offboard_py" type="image_car_detector.py" name="image_car_detector" required="True" output="screen" args="--venv /home/ciafa/mnt_point/mgfelix/venv">
+		<param name = "uav_id" value = "uav0"/>
+	</node>
+	<node pkg="offboard_py" type="georeferentiation_car.py" name="georeferentiation_car" required="True" output="screen">
+		<param name = "uav_id" value = "uav0"/>
+	</node>
+	<node pkg="offboard_py" type="kalman_filter.py" name="kalman_filter" required="True" output="screen">
+		<param name = "uav_id" value = "uav0"/>
+	</node>
+	
+
+
+</launch>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+	<!-- Include the MAVROS node with SITL and Gazebo -->
+	<include file="$(find px4)/launch/multi_uav_fusion.launch">
+	</include>
+
+	<!-- Nodes to control the particles -->
+	<!-- Leader particle node-->
+	
+	
+	<!-- Nodes to control the drones -->
+	<node pkg="offboard_py" type="takeoff_node.py" name="takeoff_node_py0" required="true" output="screen"> 
+		<param name = "uav_id" value = "uav0"/>
+	</node>
+
+
+</launch>

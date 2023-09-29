@@ -1,0 +1,73 @@
+
+
+# criar um container Docker 
+sudo docker run --rm -it --privileged \
+--env=LOCAL_USER_ID="$(id -u)" \
+-v /mnt/hdd_1_500gb/mgfelix/src/Firmware:/src/PX4-Autopilot/:rw \
+-v /tmp/.X11-unix:/tmp/.X11-unix:ro \
+-e DISPLAY=:0 \
+--network host \
+-w /src/PX4-Autopilot/ \
+px4io/px4-dev-ros-noetic bash
+
+# setup
+source Tools/simulation/gazebo/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/simulation/gazebo/sitl_gazebo
+
+
+# correr simulação
+roslaunch launch/multi_uav_mavros_sitl.launch 
+
+Para correr o gazebo no host
+gzclient
+
+
+
+# para correr os teus nós, crias outro container com acesso ao tue catkin workspace
+
+docker run --rm -it --privileged \
+--env=LOCAL_USER_ID="$(id -u)" \
+-v /home/jbranco/catkin_ws:/src/catkin_ws/:rw \
+-v /tmp/.X11-unix:/tmp/.X11-unix:ro \
+-e DISPLAY=:0 \
+--network host \
+-w /src/catkin_ws/ \
+px4io/px4-dev-ros-noetic bash
+
+# podes compilar se necessário
+catkin_make
+
+# fazer sempre source do teu workspace
+source devel/setup.bash
+
+# a
+
+
+-----------------------------------------
+docker run --rm -it --privileged \
+--env=LOCAL_USER_ID="$(id -u)" \
+-v /home/jbranco/catkin_ws:/src/catkin_ws/:rw \
+-v /mnt/hdd_1_500gb/mgfelix/src/Firmware:/src/PX4-Autopilot/:rw \
+-v /mnt/hdd_1_500gb/mgfelix/venv:/home/ciafa/mnt_point/mgfelix/venv \
+-v /tmp/.X11-unix:/tmp/.X11-unix:ro \
+-e DISPLAY=:0 \
+--network host \
+-w /src/catkin_ws/ \
+px4io/px4-dev-ros-noetic bash
+
+cd /src/catkin_ws/
+#rm -rf /src/catkin_ws/devel /src/catkin_ws/build
+catkin_make # se necessário
+source devel/setup.bash
+
+cd /src/PX4-Autopilot/
+source Tools/simulation/gazebo/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/simulation/gazebo/sitl_gazebo
+
+
+roslaunch offboard_py start_offb_fusion.launch 
+
+/src/catkin_ws/src/offboard_py/launch/start_offb_fusion.launch
+
