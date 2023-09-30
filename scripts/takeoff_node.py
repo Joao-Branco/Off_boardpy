@@ -49,25 +49,25 @@ def start_offboard_control():
         MPF_Data.bank = bank
         MPF_data_pub.publish(MPF_Data)
 
-        # Saves simulation data into .csv file
-        f = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/data" + uav_id_number + ".csv", "a")
-        with f:
-            writer = csv.writer(f)
-            writer.writerow([
+        # # Saves simulation data into .csv file
+        # f = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/data" + uav_id_number + ".csv", "a")
+        # with f:
+        #     writer = csv.writer(f)
+        #     writer.writerow([
                 
-                e[0],
-            e[1],
-                curr_time,
-                roll,
-            v_cmd,
-            altitude.local,
-            #local_position.pose.position.y,
-                #local_position.pose.position.x,
-                #local_position.pose.position.z,
-                #target.x_pos,
-                #target.y_pos,
-                #target.z_pos,
-        ])
+        #         e[0],
+        #     e[1],
+        #         curr_time,
+        #         roll,
+        #     v_cmd,
+        #     altitude.local,
+        #     #local_position.pose.position.y,
+        #         #local_position.pose.position.x,
+        #         #local_position.pose.position.z,
+        #         #target.x_pos,
+        #         #target.y_pos,
+        #         #target.z_pos,
+        # ])
         aux = aux + 1
         rate.sleep()
             

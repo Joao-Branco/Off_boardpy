@@ -9,8 +9,10 @@ import os
 
 from MARS_msgs.msg import ParticleTelemetry
 
+global gamma_minus_1, gamma_dot_minus_1
+
 def particle_cb(data):
-    global gamma_minus_1, gamma_dot_minus_1
+    #global gamma_minus_1, gamma_dot_minus_1
     gamma_minus_1 = data.gamma
     gamma_dot_minus_1 = data.gamma_dot
 
@@ -57,12 +59,12 @@ def particle_node():
     dt = 0.0
     aux = 0
 
-    if os.path.isfile("/home/mgfelix/catkin_ws/src/plot/simulation_data/particle_data" + uav_id_number + ".csv"):
-    	os.remove("/home/mgfelix/catkin_ws/src/plot/simulation_data/particle_data" + uav_id_number + ".csv")
+    # if os.path.isfile("/home/mgfelix/catkin_ws/src/plot/simulation_data/particle_data" + uav_id_number + ".csv"):
+    # 	os.remove("/home/mgfelix/catkin_ws/src/plot/simulation_data/particle_data" + uav_id_number + ".csv")
 
     while not rospy.is_shutdown():
 
-        global gamma_minus_1, gamma_dot_minus_1
+        #global gamma_minus_1, gamma_dot_minus_1
 
         dt = rospy.get_time() - curr_time
         timer = rospy.get_time() - start_time
@@ -82,22 +84,22 @@ def particle_node():
 
         # Publishing the message
         pub.publish(msg)
-	f = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/particle_data" + uav_id_number + ".csv", "a")
-	with f:
-		writer = csv.writer(f)
-	        writer.writerow([
-	       		gamma,
-			gamma_dot,
-			timer,
-			gamma_tilde,
-			gamma_dot_minus_1
-	])
+	# f = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/particle_data" + uav_id_number + ".csv", "a")
+	# with f:
+	# 	writer = csv.writer(f)
+	#         writer.writerow([
+	#        		gamma,
+	# 		gamma_dot,
+	# 		timer,
+	# 		gamma_tilde,
+	# 		gamma_dot_minus_1
+	# ])
 
         rate.sleep()
 
 
 if __name__ == '__main__':
-    	try:
-        	particle_node()
-   	except rospy.ROSInterruptException:
-        	pass
+    try:
+        particle_node()
+    except rospy.ROSInterruptException:
+        pass

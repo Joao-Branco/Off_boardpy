@@ -67,6 +67,7 @@ export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/simulation/gazebo/sitl_gazebo
 
 
+#open QGroundControl before launch
 roslaunch offboard_py start_offb_fusion.launch 
 
 /src/catkin_ws/src/offboard_py/launch/start_offb_fusion.launch
