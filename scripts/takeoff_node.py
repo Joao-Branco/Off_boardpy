@@ -49,6 +49,8 @@ def start_offboard_control():
         MPF_Data.bank = bank
         MPF_data_pub.publish(MPF_Data)
 
+        rospy.loginfo("Main Control running")
+
         # # Saves simulation data into .csv file
         # f = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/data" + uav_id_number + ".csv", "a")
         # with f:
@@ -181,6 +183,8 @@ def send_att():
     att.body_rate = Vector3()
     att.header = Header()
     att.header.frame_id = "base_footprint"
+
+    rospy.loginfo("Target position received %f, %f, %f", target.x_pos, target.y_pos, target.z_pos)
 
     # Function to calculate the roll given the current UAV data, position of the target and the virtual particle to follow.
     var = roll_control.roll_calculation(local_position, vfr_hud, target, particle) 

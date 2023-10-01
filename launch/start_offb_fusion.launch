@@ -4,9 +4,6 @@
 	<include file="$(find px4)/launch/multi_uav_fusion.launch">
 	</include>
 	
-	<!-- Node to define target position -->
-	<node pkg="offboard_py" type="targetUpdated.py" name="targetUpdated" required="True" output="screen">
-	</node>
 
 	<!-- Nodes to control the particles -->
 	<!-- Leader particle node-->
@@ -28,6 +25,20 @@
 	</node>
 	<node pkg="offboard_py" type="particleUpdated.py" name ="particleUpdated1" required="true" output="screen">
 		<param name = "uav_id" value = "uav1"/>
+	</node>
+
+	<!-- Nodes to define target position based on computer vision algorithm -->
+	<node pkg="offboard_py" type="image_publish.py" name="image_publisher" required="True" output="screen">
+		<param name = "uav_id" value = "uav0"/>
+	</node>
+	<node pkg="offboard_py" type="image_car_detector.py" name="image_car_detector" required="True" output="screen" arg="--venv /home/ciafa/mnt_point/mgfelix/venv">
+		<param name = "uav_id" value = "uav0"/>
+	</node>
+	<node pkg="offboard_py" type="georeferentiation_car.py" name="georeferentiation_car" required="True" output="screen">
+		<param name = "uav_id" value = "uav0"/>
+	</node>
+	<node pkg="offboard_py" type="kalman_filter.py" name="kalman_filter" required="True" output="screen">
+		<param name = "uav_id" value = "uav0"/>
 	</node>
 
 
