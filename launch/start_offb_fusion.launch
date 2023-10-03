@@ -15,31 +15,14 @@
 	<node pkg="offboard_py" type="takeoff_node.py" name="takeoff_node_py0" required="true" output="screen"> 
 		<param name = "uav_id" value = "uav0"/>
 	</node>
-	<node pkg="offboard_py" type="takeoff_node.py" name="takeoff_node_py1" required="true" output="screen"> 
-		<param name = "uav_id" value = "uav1"/>
-	</node>
 
 	<!-- Other particles nodes: as many as the number of UAVs -->
 	<node pkg="offboard_py" type="particleUpdated.py" name ="particleUpdated0" required="true" output="screen">
 		<param name = "uav_id" value = "uav0"/>
 	</node>
-	<node pkg="offboard_py" type="particleUpdated.py" name ="particleUpdated1" required="true" output="screen">
-		<param name = "uav_id" value = "uav1"/>
-	</node>
+
 
 	<!-- Nodes to define target position based on computer vision algorithm -->
-	<node pkg="offboard_py" type="image_publish.py" name="image_publisher" required="True" output="screen">
-		<param name = "uav_id" value = "uav0"/>
-	</node>
-	<node pkg="offboard_py" type="image_car_detector.py" name="image_car_detector" required="True" output="screen" arg="--venv /home/ciafa/mnt_point/mgfelix/venv">
-		<param name = "uav_id" value = "uav0"/>
-	</node>
-	<node pkg="offboard_py" type="georeferentiation_car.py" name="georeferentiation_car" required="True" output="screen">
-		<param name = "uav_id" value = "uav0"/>
-	</node>
-	<node pkg="offboard_py" type="kalman_filter.py" name="kalman_filter" required="True" output="screen">
-		<param name = "uav_id" value = "uav0"/>
-	</node>
 
 
 </launch>

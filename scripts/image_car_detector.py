@@ -1,4 +1,4 @@
-#!/home/ciafa/mnt_point/mgfelix/venv/bin/python
+#!/mnt/hdd_1_500gb/mgfelix/venv/bin/python
 
 '''#! /usr/bin/env python3'''
 
@@ -26,9 +26,9 @@ class YoloWrapper:
     def __init__(self):
         self.yolo = YOLO(
             **{
-                "model_path": '/home/mgfelix/catkin_ws/src/offboard_py/scripts/TrainYourOwnYOLO/Data/Model_Weights/trained_weights_final.h5',
-                "anchors_path": '/home/mgfelix/catkin_ws/src/offboard_py/scripts/TrainYourOwnYOLO/3_Inference/keras_yolo3/model_data/yolo_anchors.txt',
-                "classes_path": '/home/mgfelix/catkin_ws/src/offboard_py/scripts/TrainYourOwnYOLO/Data/Model_Weights/data_classes.txt',
+                "model_path": '/home/jbranco/catkin_ws/src/offboard_py/scripts/TrainYourOwnYOLO/Data/Model_Weights/trained_weights_final.h5',
+                "anchors_path": '/home/jbranco/catkin_ws/src/offboard_py/scripts/TrainYourOwnYOLO/3_Inference/keras_yolo3/model_data/yolo_anchors.txt',
+                "classes_path": '/home/jbranco/catkin_ws/src/offboard_py/scripts/TrainYourOwnYOLO/Data/Model_Weights/data_classes.txt',
                 "score": 0.25,
                 "gpu_num": 1,
                 "model_image_size": (416, 416),

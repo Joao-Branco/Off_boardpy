@@ -1,4 +1,4 @@
-#! /usr/bin/env python2
+#! /usr/bin/env python3
 import math
 from MARS_msgs.msg import TargetTelemetry
 from geometry_msgs.msg import Point, PoseStamped
@@ -8,8 +8,7 @@ from numpy.linalg import inv
 import rospy
 from mavros_msgs.msg import State
 import csv
-
-
+import os
 
 def filter(pos_x,pos_y, dt1, filter_x , filter_P):
     # dt = 0.1
@@ -56,7 +55,7 @@ def filter(pos_x,pos_y, dt1, filter_x , filter_P):
     K = np.dot((np.dot(P_p,filter.HT)),(inv(S)))
 
     if len(pos_x):
-        rospy.logwarn('kalman filter estimate')
+        rospy.logwarn_throttle(5,'Kalman filter estimate!')
         z = np.array([pos_x[0],pos_y[0]])
         # Estimate State
         residual = z - np.dot(filter.H, x_p)
@@ -64,7 +63,7 @@ def filter(pos_x,pos_y, dt1, filter_x , filter_P):
         # Estimate Covariance
         filter_P = P_p - np.dot((np.dot(K,filter.H)),P_p)
     else:
-        rospy.logfatal('kalman filter prevision')
+        rospy.logfatal_throttle(5,'Kalman filter prevision!')
         filter.x = x_p
         # Estimate Covariance
         filter_P = P_p
@@ -74,7 +73,7 @@ def filter(pos_x,pos_y, dt1, filter_x , filter_P):
 class kalman_filter(object):
 
     def __init__(self):
-        self.x_pred = np.array([10, 0, 30, 0])
+        self.x_pred = np.array([0, 0, 0, 0])
         self.P_pred = 0.01 * np.eye(len(self.x_pred))
         self.dt = 0.0
         self.psi_anterior = 0.0
@@ -88,36 +87,13 @@ class kalman_filter(object):
         self.state = State()
         self.target_position_geolocation = TargetTelemetry()
         self.local_position = PoseStamped()
-        """d = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/target_data.csv", "a")
 
-        with d:
-            writer = csv.writer(d)
-            writer.writerow(['time',
-                             'UAV_X',
-                             'UAV_Y',
-                             'target.x_pos',
-                             'target.y_pos',
-                             'target.vx',
-                             'target.vy',
-                             'target.omega',
-                             'target.accel',
-                             'target.vel',
-                             'target.psi',
-                             'target_x_true',
-                             'target_y_true',
-                             'target_vx_true',
-                             'target_vy_true',
-                             'target_v_true',
-                             'erro_posicao_kalman',
-                             ])"""
     def setup_pubsub(self):
         rospy.loginfo("-------Setting pub - sub-----")
         self.targetposition_geo_sub = rospy.Subscriber(uav_id + "/target_position_geolocation", TargetTelemetry, self.target_position_geolocation_cb)
-        self.animated_box_sub = rospy.Subscriber(uav_id + "/animated_box", Point, self.target_true_position_cb)
+        self.animated_box_sub = rospy.Subscriber("/animated_box", Point, self.target_true_position_cb)
         self.state_sub = rospy.Subscriber(uav_id + "/mavros/state", State, self.state_cb)
         self.local_position_sub = rospy.Subscriber(uav_id + "/mavros/local_position/pose", PoseStamped, self.local_position_cb)
-
-
 
     # ros services
     def setup_services(self):
@@ -160,10 +136,6 @@ class kalman_filter(object):
         while not rospy.is_shutdown():
 
             self.dt = rospy.get_time() - curr_time
-            if self.dt == 0:
-		print(self.dt)
-		self.dt = 0.0001
-
             curr_time = rospy.get_time()
 
             if self.target_position_geolocation.x_pos == 0 and self.target_position_geolocation.y_pos == 0:
@@ -196,6 +168,8 @@ class kalman_filter(object):
             while dif_psi > math.pi:
                 dif_psi = dif_psi - 2 * math.pi
 
+            if self.dt == 0:
+                self.dt = 0.0001
             omega_estimation = dif_psi / self.dt
 
             omega = np.tanh(omega_estimation)
@@ -214,7 +188,7 @@ class kalman_filter(object):
             v_true = math.sqrt(vx_true ** 2 + vy_true ** 2)
             # calculo dos erros de posicao
             # erro_posicao_kalman = math.sqrt((x_true - estimation_data[0]) ** 2 + (y_true - estimation_data[3]) ** 2)
-            erro_posicao_kalman = math.sqrt((-10 - estimation_data[0]) ** 2 + (-30 - estimation_data[2]) ** 2)
+            erro_posicao_kalman = math.sqrt((0 - estimation_data[0]) ** 2 + (0 - estimation_data[2]) ** 2)
 
 
             acc = 0
@@ -231,9 +205,13 @@ class kalman_filter(object):
             target_3d_position_msg.psi = psi
 
             pub.publish(target_3d_position_msg)
-            rospy.loginfo(target_3d_position_msg)
+            rospy.loginfo_throttle(5,target_3d_position_msg.x_pos)
+            rospy.loginfo_throttle(5,target_3d_position_msg.y_pos)
+            rospy.loginfo_throttle(5,target_3d_position_msg.vx)
+            rospy.loginfo_throttle(5,target_3d_position_msg.vy)
+            
 
-            """d = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/target_data.csv", "a")
+            d = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/target.csv", "a")
 
             with d:
                 writer = csv.writer(d)
@@ -254,7 +232,7 @@ class kalman_filter(object):
                                  vy_true,
                                  v_true,
                                  erro_posicao_kalman,
-                                 ])"""
+                                 ])
 
             self.rate.sleep()
 
@@ -277,6 +255,9 @@ if __name__ == '__main__':
     global uav_id_number, uav_id
     uav_id = rospy.get_param("~uav_id")
     uav_id_number = uav_id[-1]
+
+    if os.path.isfile("/home/mgfelix/catkin_ws/src/plot/simulation_data/target.csv"):
+        os.remove("/home/mgfelix/catkin_ws/src/plot/simulation_data/target.csv")
    
     rospy.sleep(0)
 

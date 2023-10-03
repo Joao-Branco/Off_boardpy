@@ -1,4 +1,4 @@
-#! /usr/bin/env python2
+#! /usr/bin/env python3
 
 from __future__ import division
 
@@ -12,32 +12,32 @@ integral_previous = 0.0
 
 def thrust_input(vfr_hud, delta_t, v):
 
-    global integral_previous
+	global integral_previous
 
-    velocity_setpoint = v
-    velocity_error = velocity_setpoint - vfr_hud.airspeed
-    integral = integral_previous + (0.3 * velocity_error * delta_t)
+	velocity_setpoint = v
+	velocity_error = velocity_setpoint - vfr_hud.airspeed
+	integral = integral_previous + (0.3 * velocity_error * delta_t)
 
-    # Integral should be between -0.2 and 0.2
+	# Integral should be between -0.2 and 0.2
 
-    if integral < -0.2:
-        integral = -0.2
-    elif integral > 0.2:
-        integral = 0.2
-    else:
-        integral
+	if integral < -0.2:
+		integral = -0.2
+	elif integral > 0.2:
+		integral = 0.2
+	else:
+		integral
 
-    integral_previous = integral
+	integral_previous = integral
 
-    thrust = integral + 0.2 * velocity_error + 0.5
+	thrust = integral + 0.2 * velocity_error + 0.5
 
-    # Power interval between 0 and 1
+	# Power interval between 0 and 1
 
-    if thrust < 0.05:
-        thrust = 0.05
-    elif thrust > 1.0:
-        thrust = 1.0
-    else:
-        thrust
+	if thrust < 0.05:
+		thrust = 0.05
+	elif thrust > 1.0:
+		thrust = 1.0
+	else:
+		thrust
 
-    return thrust
+	return thrust

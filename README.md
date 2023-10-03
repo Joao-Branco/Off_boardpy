@@ -19,6 +19,10 @@ sudo geographiclib-get-geoids egm96-5
 
 Push to scripts this git TrainYourOwnYolo
 
-```bash
 https://github.com/AntonMu/TrainYourOwnYOLO
+
+Inside TrainYourOwnYOLO/Data/Model_Weights/ do the following command
+
+```bash
+gdown https://drive.google.com/uc?id=1MGXAP_XD_w4OExPP10UHsejWrMww8Tu7
 ```
