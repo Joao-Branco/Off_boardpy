@@ -61,8 +61,8 @@ class YoloWrapper:
 
     def start(self):
         pub = rospy.Publisher(uav_id + "/car_2d_position", target_info, queue_size=10)
-        #self.image_sub = rospy.Subscriber(uav_id + "/original_image_topic", RosImage, self.image_cb)
-        self.image_sub = rospy.Subscriber(uav_id + "/mavros/plane_video/camera/image_raw", RosImage, self.image_cb)
+        self.image_sub = rospy.Subscriber(uav_id + "/original_image_topic", RosImage, self.image_cb)
+        #self.image_sub = rospy.Subscriber(uav_id + "/mavros/plane_video/camera/image_raw", RosImage, self.image_cb)
 
         rospy.loginfo('Car detector script activated!')
 
@@ -87,35 +87,35 @@ class YoloWrapper:
                 if len(self.target_list):
                     print('entrei no len')
                     self.n_detecao +=1
-                    for i in range(length):
-                        d = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/detecoes_data.csv", "a")
-                        with d:
-                            writer = csv.writer(d)
-                            writer.writerow([time_plot,
-                                             self.dt_entre_frame,
-                                             self.n,
-                                             self.n_detecao,
-                                             [],
-                                             self.length,
-                                             length,
-                                             i,
-                                             self.target_list[i].x_min,
-                                             self.target_list[i].x_max,
-                                             self.target_list[i].y_min,
-                                             self.target_list[i].y_max,
-                                             self.target_list[i].confianca,
-                                             ])
+                    # for i in range(length):
+                        # d = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/detecoes_data.csv", "a")
+                        # with d:
+                        #     writer = csv.writer(d)
+                        #     writer.writerow([time_plot,
+                        #                      self.dt_entre_frame,
+                        #                      self.n,
+                        #                      self.n_detecao,
+                        #                      [],
+                        #                      self.length,
+                        #                      length,
+                        #                      i,
+                        #                      self.target_list[i].x_min,
+                        #                      self.target_list[i].x_max,
+                        #                      self.target_list[i].y_min,
+                        #                      self.target_list[i].y_max,
+                        #                      self.target_list[i].confianca,
+                        #                      ])
                 else:
                     self.no_detection += 1
-                    d = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/detecoes_data.csv", "a")
-                    with d:
-                        writer = csv.writer(d)
-                        writer.writerow([time_plot,
-                                         self.dt_entre_frame,
-                                         self.n,
-                                         [],
-                                         self.no_detection,
-                                         ])
+                    # d = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/detecoes_data.csv", "a")
+                    # with d:
+                    #     writer = csv.writer(d)
+                    #     writer.writerow([time_plot,
+                    #                      self.dt_entre_frame,
+                    #                      self.n,
+                    #                      [],
+                    #                      self.no_detection,
+                    #                      ])
 
             rospy.sleep(0)
 

@@ -324,7 +324,7 @@ if __name__ == "__main__":
 	rospy.loginfo('Connected!')
 
 	# Waits 20 seconds for take off, and then it can initiate the offboard mode
-	time.sleep(5)
+	time.sleep(20)
 
 	# Initiates takeoff and arming sequence
 	set_mode_client(0, 'AUTO.TAKEOFF') # Sets TAKEOFF mode for UAV0

@@ -23,13 +23,14 @@ class Video():
 		video_source (string): Udp source ip and port
 	"""
 
-	def __init__(self, port = (5600)): # To change the port for each UAV, do something like (5600 + uav_id_number)
+	def __init__(self, uav_id_number = 0): # To change the port for each UAV, do something like (5600 + uav_id_number)
 		"""Summary
-
+		
 		Args:
 		port (int, optional): UDP port
 		"""
-
+		port = (5600)# + int(uav_id_number)
+		print(port)
 		Gst.init(None)
 		print("AQUI")
 
@@ -151,7 +152,7 @@ def image_publish_node():
 
 	rate = rospy.Rate(10)
 
-	video = Video()
+	video = Video(uav_id_number= uav_id_number)
 	bridge = CvBridge()
 
 	rospy.sleep(0)

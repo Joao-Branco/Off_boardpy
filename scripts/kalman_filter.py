@@ -211,28 +211,28 @@ class kalman_filter(object):
             rospy.loginfo_throttle(5,target_3d_position_msg.vy)
             
 
-            d = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/target.csv", "a")
+            # d = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/target.csv", "a")
 
-            with d:
-                writer = csv.writer(d)
-                writer.writerow([time_plot,
-                                 self.local_position.pose.position.x,
-                                 self.local_position.pose.position.y,
-                                 target_3d_position_msg.x_pos,
-                                 target_3d_position_msg.y_pos,
-                                 target_3d_position_msg.vx,
-                                 target_3d_position_msg.vy,
-                                 target_3d_position_msg.omega,
-                                 target_3d_position_msg.accel,
-                                 target_3d_position_msg.vel,
-                                 target_3d_position_msg.psi,
-                                 x_true,
-                                 y_true,
-                                 vx_true,
-                                 vy_true,
-                                 v_true,
-                                 erro_posicao_kalman,
-                                 ])
+            # with d:
+            #     writer = csv.writer(d)
+            #     writer.writerow([time_plot,
+            #                      self.local_position.pose.position.x,
+            #                      self.local_position.pose.position.y,
+            #                      target_3d_position_msg.x_pos,
+            #                      target_3d_position_msg.y_pos,
+            #                      target_3d_position_msg.vx,
+            #                      target_3d_position_msg.vy,
+            #                      target_3d_position_msg.omega,
+            #                      target_3d_position_msg.accel,
+            #                      target_3d_position_msg.vel,
+            #                      target_3d_position_msg.psi,
+            #                      x_true,
+            #                      y_true,
+            #                      vx_true,
+            #                      vy_true,
+            #                      v_true,
+            #                      erro_posicao_kalman,
+            #                      ])
 
             self.rate.sleep()
 
@@ -256,8 +256,8 @@ if __name__ == '__main__':
     uav_id = rospy.get_param("~uav_id")
     uav_id_number = uav_id[-1]
 
-    if os.path.isfile("/home/mgfelix/catkin_ws/src/plot/simulation_data/target.csv"):
-        os.remove("/home/mgfelix/catkin_ws/src/plot/simulation_data/target.csv")
+    # if os.path.isfile("/home/mgfelix/catkin_ws/src/plot/simulation_data/target.csv"):
+    #     os.remove("/home/mgfelix/catkin_ws/src/plot/simulation_data/target.csv")
    
     rospy.sleep(0)
 

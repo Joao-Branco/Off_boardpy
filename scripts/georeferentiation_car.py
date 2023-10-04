@@ -170,13 +170,13 @@ class Inicializacao(object):
         self.target2d_sub = rospy.Subscriber(uav_id + "/car_2d_position", target_info, self.image_target_cb)
         self.VFR_HUD_sub = rospy.Subscriber(uav_id + "/mavros/vfr_hud", VFR_HUD, self.vfr_hud_cb)
 
-        d = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/target_position_geo.csv", "a")
+        # d = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/target_position_geo.csv", "a")
 
-        with d:
-            writer = csv.writer(d)
-            writer.writerow(['target.x_pos',
-                             'target.y_pos',
-                             ])
+        # with d:
+        #     writer = csv.writer(d)
+        #     writer.writerow(['target.x_pos',
+        #                      'target.y_pos',
+        #                      ])
     # ros services
     def setup_services(self):
         rospy.loginfo('----Waiting for services to connect----')
@@ -345,13 +345,13 @@ class Inicializacao(object):
                 target_position_geolocation_msg.y_pos = measurement_y[0]
                 pub.publish(target_position_geolocation_msg)
 
-            d = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/target_position_geo.csv", "a")
+            # d = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/target_position_geo.csv", "a")
 
-            with d:
-                writer = csv.writer(d)
-                writer.writerow([target_position_geolocation_msg.x_pos,
-                                 target_position_geolocation_msg.y_pos,
-                                 ])
+            # with d:
+            #     writer = csv.writer(d)
+            #     writer.writerow([target_position_geolocation_msg.x_pos,
+            #                      target_position_geolocation_msg.y_pos,
+            #                      ])
             self.rate.sleep()
 
     # callback functions
