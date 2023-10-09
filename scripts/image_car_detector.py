@@ -165,7 +165,7 @@ class YoloWrapper:
         self.cv_image = np.ndarray((w, h, int(depth)), dtype=np.uint8, buffer=car_image.data)
         self.image = Image.fromarray(self.cv_image)
         self.new_image = True
-        rospy.loginfo('Got Image')
+        #rospy.loginfo('Got Image')
 
 
 if __name__ == '__main__':

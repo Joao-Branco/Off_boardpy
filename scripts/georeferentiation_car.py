@@ -143,18 +143,11 @@ class Inicializacao(object):
         self.service_timeout = 30
         self.setup_pubsub()
         self.setup_services()
-        self.target_2d_position = target_info()
+        self.target_2d_position = None
         self.erro_posicao = 0
         self.tempo_exato = 0
         self.vfr_hud = VFR_HUD()
-        self.confidence_anterior = 0
-        self.xmin_anterior = 0
-        self.xmax_anterior = 0
-        self.ymin_anterior = 0
-        self.ymax_anterior = 0
-        self.length_anterior = 0
-        self.length = 0
-        self.target_2d_position_n_detecao_anterior = 0
+
         # self.animated_box_position = gazebo_republish()
 
         rospy.loginfo("init finished")
@@ -213,137 +206,98 @@ class Inicializacao(object):
         rospy.loginfo('--Got heartbeat from FCU----')
 
         pub = rospy.Publisher(uav_id + "/target_position_geolocation", TargetTelemetry, queue_size=10)
-
-        target_position_geolocation_msg = TargetTelemetry()
-
-        curr_time = rospy.get_time()
-        start_time = rospy.get_time()
+        
 
         while not rospy.is_shutdown():
-            self.dt = rospy.get_time() - curr_time
-            curr_time = rospy.get_time()
-            # Get time in every loop iteration
-            yaw = euler_from_quaternion([self.local_position.pose.orientation.x, self.local_position.pose.orientation.y,
-                                         self.local_position.pose.orientation.z,
-                                         self.local_position.pose.orientation.w])[2]
-            yaw_transform1 = yaw - np.pi * 0.5
-            yaw_transform2 = - yaw_transform1
+            if self.target_2d_position is not None:
 
-            # yaw wraptopi
-            while yaw_transform2 < -math.pi:
-                yaw_transform2 = yaw_transform2 + 2 * math.pi
+                targets = self.target_2d_position.targets
 
-            while yaw_transform2 > math.pi:
-                yaw_transform2 = yaw_transform2 - 2 * math.pi
+                self.target_2d_position = None
 
-            roll = \
-                euler_from_quaternion([self.local_position.pose.orientation.x, self.local_position.pose.orientation.y,
-                                       self.local_position.pose.orientation.z,
-                                       self.local_position.pose.orientation.w])[0]
-            # roll wraptopi
-            while roll < -math.pi:
-                roll = roll + 2 * math.pi
+                # Get time in every loop iteration
+                yaw = euler_from_quaternion([self.local_position.pose.orientation.x, self.local_position.pose.orientation.y,
+                                            self.local_position.pose.orientation.z,
+                                            self.local_position.pose.orientation.w])[2]
+                yaw_transform1 = yaw - np.pi * 0.5
+                yaw_transform2 = - yaw_transform1
 
-            while roll > math.pi:
-                roll = roll - 2 * math.pi
+                # yaw wraptopi
+                while yaw_transform2 < -math.pi:
+                    yaw_transform2 = yaw_transform2 + 2 * math.pi
 
-            pitch = \
-                euler_from_quaternion([self.local_position.pose.orientation.x, self.local_position.pose.orientation.y,
-                                       self.local_position.pose.orientation.z,
-                                       self.local_position.pose.orientation.w])[1]
-            # pitch wraptopi
-            while pitch < -math.pi:
-                pitch = pitch + 2 * math.pi
+                while yaw_transform2 > math.pi:
+                    yaw_transform2 = yaw_transform2 - 2 * math.pi
 
-            while pitch > math.pi:
-                pitch = pitch - 2 * math.pi
+                roll = \
+                    euler_from_quaternion([self.local_position.pose.orientation.x, self.local_position.pose.orientation.y,
+                                        self.local_position.pose.orientation.z,
+                                        self.local_position.pose.orientation.w])[0]
+                # roll wraptopi
+                while roll < -math.pi:
+                    roll = roll + 2 * math.pi
 
-            # definicao de variaveis
+                while roll > math.pi:
+                    roll = roll - 2 * math.pi
 
-            uav_alt = np.abs(self.local_position.pose.position.z)
-            x_UAV = self.local_position.pose.position.x
-            y_UAV = self.local_position.pose.position.y
-            pan_t = 1.2  # -1.2  # angles must be radians
-            tilt_t = -0.633668  # angles must be radians
-            hfov = 1.57
-            # tilt_t = 0  # angles must be radians
-            sensor_width_t = 640  # aumentamos
-            sensor_height_t = 640
-            sensorFocalDistance_t = (sensor_width_t/2)/(math.tan(hfov/2))
+                pitch = \
+                    euler_from_quaternion([self.local_position.pose.orientation.x, self.local_position.pose.orientation.y,
+                                        self.local_position.pose.orientation.z,
+                                        self.local_position.pose.orientation.w])[1]
+                # pitch wraptopi
+                while pitch < -math.pi:
+                    pitch = pitch + 2 * math.pi
 
-            length = len(self.target_2d_position.targets)
-            # rospy.loginfo("length %s", length)
-            n = 0
+                while pitch > math.pi:
+                    pitch = pitch - 2 * math.pi
 
-            if self.target_2d_position.n_detecao > self.target_2d_position_n_detecao_anterior:
-                self.target_2d_position_n_detecao_anterior = self.target_2d_position.n_detecao
-                if length==0:
-                    rospy.logfatal('No target at sight!')
-                    measurement_x = [0]
-                    measurement_y = [0]
-                    n += 1
-                    pass
-                else:
-                    if length>1:
-                        rospy.logwarn('%s target detected!', length)
-                        for i in range(length):
-                            self.confidence = self.target_2d_position.targets[i].confianca
+                # definicao de variaveis
 
-                            if self.confidence > self.confidence_anterior:
-                                self.confidence = self.target_2d_position.targets[i].confianca
-                                self.xmin = self.target_2d_position.targets[i].x_min
-                                self.xmax = self.target_2d_position.targets[i].x_max
-                                self.ymin = self.target_2d_position.targets[i].y_min
-                                self.ymax = self.target_2d_position.targets[i].y_max
-                                self.confidence_anterior = self.target_2d_position.targets[i].confianca
-                                self.xmin_anterior = self.xmin
-                                self.xmax_anterior = self.xmax
-                                self.ymin_anterior = self.ymin
-                                self.ymax_anterior = self.ymax
-                            else:
-                                self.xmin = self.xmin_anterior
-                                self.xmax = self.xmax_anterior
-                                self.ymin = self.ymin_anterior
-                                self.ymax = self.ymax_anterior
-                                self.confidence = self.confidence_anterior
+                uav_alt = np.abs(self.local_position.pose.position.z)
+                x_UAV = self.local_position.pose.position.x
+                y_UAV = self.local_position.pose.position.y
+                pan_t = 1.2  # -1.2  # angles must be radians
+                tilt_t = -0.633668  # angles must be radians
+                hfov = 1.57
+                # tilt_t = 0  # angles must be radians
+                sensor_width_t = 640  # aumentamos
+                sensor_height_t = 640
+                sensorFocalDistance_t = (sensor_width_t/2)/(math.tan(hfov/2))
 
-                    else:
-                        rospy.logdebug('One target detected!')
-                        print(self.target_2d_position.targets)
-                        self.confidence = self.target_2d_position.targets[0].confianca
-                        self.xmin = self.target_2d_position.targets[0].x_min
-                        self.xmax = self.target_2d_position.targets[0].x_max
-                        self.ymin = self.target_2d_position.targets[0].y_min
-                        self.ymax = self.target_2d_position.targets[0].y_max
+                length = len(targets)
+                # rospy.loginfo("length %s", length)
+                if length > 0:
 
-                    target_2d_vertical_coordinate = self.xmin + ((self.xmax -self.xmin) / 2)
-                    target_2d_horizontal_coordinate = self.ymin + ((self.ymax - self.ymin) / 2)
+                    # sort detections by confidence, decreasing confidence
+                    confidence_sorted_targets = sorted(targets, key=lambda x: x.confianca, reverse=True)
+                    max_target = confidence_sorted_targets[0]
+
+
+                    target_2d_vertical_coordinate = max_target.x_min + ((max_target.x_max - max_target.x_min) / 2)
+                    target_2d_horizontal_coordinate = max_target.y_min + ((max_target.y_max - max_target.y_min) / 2)
 
                     #executar a geolocalizacao
                     raw_target_3d_coordinate = pixel2WorldCoordinateFunct(target_2d_vertical_coordinate,
-                                                                      target_2d_horizontal_coordinate, roll, pitch,
-                                                                      yaw_transform2, uav_alt, pan_t, tilt_t,
-                                                                      sensor_width_t,
-                                                                      sensor_height_t, sensorFocalDistance_t, x_UAV,
-                                                                      y_UAV)
+                                                                    target_2d_horizontal_coordinate, roll, pitch,
+                                                                    yaw_transform2, uav_alt, pan_t, tilt_t,
+                                                                    sensor_width_t,
+                                                                    sensor_height_t, sensorFocalDistance_t, x_UAV,
+                                                                    y_UAV)
 
                     measurement_x = raw_target_3d_coordinate[1]  # valor east
                     measurement_y = raw_target_3d_coordinate[0]  # valor north
 
                     print('GEO position x ', measurement_x[0])
                     print('GEO position y ', measurement_y[0])
+                
+                    target_position_geolocation_msg = TargetTelemetry()
 
-                target_position_geolocation_msg.x_pos = measurement_x[0]
-                target_position_geolocation_msg.y_pos = measurement_y[0]
+                    target_position_geolocation_msg.x_pos = measurement_x[0]
+                    target_position_geolocation_msg.y_pos = measurement_y[0]
 
-                pub.publish(target_position_geolocation_msg)
+                    pub.publish(target_position_geolocation_msg)
 
-            else:
-                measurement_x = [0]
-                measurement_y = [0]
-                target_position_geolocation_msg.x_pos = measurement_x[0]
-                target_position_geolocation_msg.y_pos = measurement_y[0]
-                pub.publish(target_position_geolocation_msg)
+                    
 
             # d = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/target_position_geo.csv", "a")
 
@@ -387,6 +341,7 @@ class Inicializacao(object):
         self.vfr_hud = data
 
     def image_target_cb(self, data):
+        rospy.loginfo(f'got targets:{data.targets}')
         self.target_2d_position = data
 
 if __name__ == '__main__':

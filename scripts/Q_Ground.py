@@ -13,7 +13,8 @@ def run_qgroundcontrol():
         time.sleep(40)
 
         # Kill the QGroundControl process
-        p.kill()
+        #p.kill()
+        subprocess.Popen('killall QGroundControl'.split(' '))
 
     except Exception as e:
         rospy.logerr("An error occurred: %s", str(e))

@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<launch>
+
+	<node pkg="offboard_py" type="Q_Ground.py" name ="QGround_launcher" required="true" output="screen">
+	</node>
+
+
+	<!-- Include the MAVROS node with SITL and Gazebo -->
+	<include file="$(find px4)/launch/multi_uav_fusion_single.launch">
+	</include>
+	
+	<!-- Nodes to control the particles -->
+	<!-- Leader particle node-->
+	
+	<node pkg="offboard_py" type="particleUpdatedLeader.py" name ="particleUpdatedLeader" required="true" output="screen">
+	</node>
+	
+	<!-- Nodes to arm and takeoff -->
+	<node pkg="offboard_py" type="takeoff_node.py" name="takeoff_node_py0" required="true" output="screen"> 
+		<param name = "uav_id" value = "uav0"/>
+	</node>
+
+
+	<!-- Other particles nodes: as many as the number of UAVs -->
+	<node pkg="offboard_py" type="particleUpdated.py" name ="particleUpdated0" required="true" output="screen">
+		<param name = "uav_id" value = "uav0"/>
+	</node>
+
+
+
+
+	<!-- Nodes to define target position based on computer vision algorithm -->
+
+	<include file="$(find offboard_py)/launch/sensor_camera.launch">
+		<arg name = "uav_id" value = "uav0"/>
+	</include>
+
+
+
+	<!-- Nodes to create delay -->
+
+	<param name="total_uav" value="3"/>
+    <param name="delay_mean" value="0.0001"/>
+    <param name="delay_std" value="0.00000001"/>
+
+    <node pkg="sensor_fusion" type="buffer.py" name="delays" required="True" output="screen">
+	</node>
+
+
+	<!-- Nodes to create kalman filters -->
+	<group ns = "uav0">
+        <include file="$(find sensor_fusion)/launch/uav_inbound.launch" >
+            <arg name="ID" value="0"/>
+        </include>
+    </group>
+
+
+
+
+
+
+</launch>
