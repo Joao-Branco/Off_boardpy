@@ -13,6 +13,7 @@ from cv_bridge import CvBridge, CvBridgeError
 import cv2
 import tensorflow.python.keras.backend as K # Illegal core dumped.
 import csv
+from std_msgs.msg import Float64
 
 
 
@@ -61,6 +62,7 @@ class YoloWrapper:
 
     def start(self):
         pub = rospy.Publisher(uav_id + "/car_2d_position", target_info, queue_size=10)
+        pub_latencia = rospy.Publisher(uav_id + "/detector_lantency", Float64, queue_size=10)
         self.image_sub = rospy.Subscriber(uav_id + "/original_image_topic", RosImage, self.image_cb)
         #self.image_sub = rospy.Subscriber(uav_id + "/mavros/plane_video/camera/image_raw", RosImage, self.image_cb)
 
@@ -73,6 +75,7 @@ class YoloWrapper:
             time_plot = time - start_time
             if self.new_image:
                 self.n += 1
+                latency = rospy.get_time()
                 self.dt_antes = rospy.get_time()
                 self.callback()
                 self.dt_entre_frame = rospy.get_time() - self.dt_antes
@@ -81,6 +84,7 @@ class YoloWrapper:
                 info.targets = self.target_list
                 info.n_detecao = self.n
                 pub.publish(info)
+                pub_latencia.publish(rospy.get_time() - latency)
                 length = len(self.target_list)
                 self.length = length + self.length_anterior
                 self.length_anterior = self.length

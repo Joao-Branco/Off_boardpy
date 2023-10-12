@@ -47,7 +47,7 @@ def roll_calculation(UAV_position, VFR, target, particle, delta_t):
 	R_R_I = np.array([[math.cos(psi_actual), -math.sin(psi_actual)], [math.sin(psi_actual), math.cos(psi_actual)]])
 
 	# Path and particle in path related definitions
-	radius = 200 # 100 to camera simulations and 200 for SITL validation
+	radius = 100 # 100 to camera simulations and 200 for SITL validation
 
 	gamma = particle.gamma
 	vd = 15

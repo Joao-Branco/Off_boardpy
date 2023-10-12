@@ -148,7 +148,7 @@ def image_publish_node():
 	uav_id = rospy.get_param("~uav_id")
 	uav_id_number = uav_id[-1]
 
-	image_pub = rospy.Publisher(uav_id + "/original_image_topic", Image, queue_size=10)
+	image_pub = rospy.Publisher(uav_id + "/original_image_topic", Image, queue_size=1)
 
 	rate = rospy.Rate(10)
 

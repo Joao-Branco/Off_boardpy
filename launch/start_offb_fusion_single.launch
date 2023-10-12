@@ -48,11 +48,11 @@
 
 
 	<!-- Nodes to create kalman filters -->
-	<group ns = "uav0">
+	<!-- <group ns = "uav0">
         <include file="$(find sensor_fusion)/launch/uav_inbound.launch" >
             <arg name="ID" value="0"/>
         </include>
-    </group>
+    </group> -->
 
 
 
