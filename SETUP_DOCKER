@@ -83,3 +83,11 @@ roslaunch offboard_py start_offb_fusion.launch
 ----------------------------------------------------------
 
 
+docker run --rm -it --privileged \
+--env=LOCAL_USER_ID="$(id -u)" \
+-v /home/jbranco/catkin_ws:/src/catkin_ws/:rw \
+-v /tmp/.X11-unix:/tmp/.X11-unix:ro \
+-e DISPLAY=:0 \
+--network host \
+-w /src/catkin_ws/ \
+px4io/px4-dev-ros-noetic bash

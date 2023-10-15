@@ -1,2 +1,3 @@
 scripts/keras_yolo3/
 scripts/TrainYourOwnYolo/
+scripts/__pycache__/

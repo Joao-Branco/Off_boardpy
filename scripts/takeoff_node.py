@@ -315,7 +315,7 @@ if __name__ == "__main__":
 	MPF_Data = MPF_data()
 
 	# Setpoint publishing MUST be faster than 2Hz
-	rate = rospy.Rate(5)
+	rate = rospy.Rate(10)
 
 	# Wait for Flight Controller connection
 	rospy.loginfo('Waiting to connect...')

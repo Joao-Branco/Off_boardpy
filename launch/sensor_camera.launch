@@ -3,13 +3,13 @@
 	<arg name="uav_id" default="uav0"/>
 
 	<!-- Nodes to define target position based on computer vision algorithm -->
-	<node pkg="offboard_py" type="image_publish.py" name="image_publisher_$(arg uav_id)" required="True" output="screen">
+	<node pkg="offboard_py" type="image_publish.py" name="image_publisher_$(arg uav_id)" required="False" output="screen">
 		<param name = "uav_id" value = "$(arg uav_id)"/>
 	</node>
-	<node pkg="offboard_py" type="image_car_detector.py" name="image_car_detector_$(arg uav_id)" required="True" output="screen" args="--venv /home/ciafa/mnt_point/mgfelix/venv">
+	<node pkg="offboard_py" type="image_car_detector.py" name="image_car_detector_$(arg uav_id)" required="False" output="screen" args="--venv /home/ciafa/mnt_point/mgfelix/venv">
 		<param name = "uav_id" value = "$(arg uav_id)"/>
 	</node>
-	<node pkg="offboard_py" type="georeferentiation_car.py" name="georeferentiation_car_$(arg uav_id)" required="True" output="screen">
+	<node pkg="offboard_py" type="georeferentiation_car.py" name="georeferentiation_car_$(arg uav_id)" required="False" output="screen">
 		<param name = "uav_id" value = "$(arg uav_id)"/>
 	</node>
 	<!-- <node pkg="offboard_py" type="kalman_filter.py" name="kalman_filter_$(arg uav_id)" required="True" output="screen">

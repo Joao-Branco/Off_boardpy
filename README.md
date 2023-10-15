@@ -26,3 +26,9 @@ Inside TrainYourOwnYOLO/Data/Model_Weights/ do the following command
 ```bash
 gdown https://drive.google.com/uc?id=1MGXAP_XD_w4OExPP10UHsejWrMww8Tu7
 ```
+
+Introduze in .bashrc
+
+```bash
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/mnt/hdd_1_500gb/dasilva/fod_work/venv/lib/python3.8/site-packages/nvidia/cuda_runtime/lib/:/mnt/hdd_1_500gb/dasilva/fod_work/venv/lib/python3.8/site-packages/nvidia/cublas/lib:/mnt/hdd_1_500gb/anaconda3/pkgs/cudatoolkit-10.1.243-h6bb024c_0/lib/:/mnt/hdd_1_500gb/dasilva/fod_work/venv/lib/python3.8/site-packages/nvidia/cudnn/lib/:/usr/local/cuda-11.2/targets/x86_64-linux/lib/
+```

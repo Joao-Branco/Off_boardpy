@@ -10,6 +10,12 @@
         </include>
     </group>
 
+    <group ns = "uav1">
+        <include file="$(find sensor_fusion)/launch/uav_inbound.launch" >
+            <arg name="ID" value="1"/>
+        </include>
+    </group>
+
 
 
 

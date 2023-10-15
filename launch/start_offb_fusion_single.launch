@@ -19,11 +19,17 @@
 	<node pkg="offboard_py" type="takeoff_node.py" name="takeoff_node_py0" required="true" output="screen"> 
 		<param name = "uav_id" value = "uav0"/>
 	</node>
+	<node pkg="offboard_py" type="takeoff_node.py" name="takeoff_node_py1" required="true" output="screen"> 
+		<param name = "uav_id" value = "uav1"/>
+	</node>
 
 
 	<!-- Other particles nodes: as many as the number of UAVs -->
 	<node pkg="offboard_py" type="particleUpdated.py" name ="particleUpdated0" required="true" output="screen">
 		<param name = "uav_id" value = "uav0"/>
+	</node>
+	<node pkg="offboard_py" type="particleUpdated.py" name ="particleUpdated1" required="true" output="screen">
+		<param name = "uav_id" value = "uav1"/>
 	</node>
 
 
@@ -31,8 +37,11 @@
 
 	<!-- Nodes to define target position based on computer vision algorithm -->
 
-	<include file="$(find offboard_py)/launch/sensor_camera.launch">
+	<!-- <include file="$(find offboard_py)/launch/sensor_camera.launch">
 		<arg name = "uav_id" value = "uav0"/>
+	</include> -->
+	<include file="$(find offboard_py)/launch/sensor_camera.launch">
+		<arg name = "uav_id" value = "uav1"/>
 	</include>
 
 
