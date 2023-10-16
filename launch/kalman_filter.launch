@@ -2,16 +2,15 @@
 <launch>
 
 
-
 	<!-- Nodes to create kalman filters -->
 	<group ns = "uav0">
-        <include file="$(find sensor_fusion)/launch/uav_inbound.launch" >
+        <include file="$(find sensor_fusion)/launch/uav_sitl.launch" >
             <arg name="ID" value="0"/>
         </include>
     </group>
 
     <group ns = "uav1">
-        <include file="$(find sensor_fusion)/launch/uav_inbound.launch" >
+        <include file="$(find sensor_fusion)/launch/uav_sitl.launch" >
             <arg name="ID" value="1"/>
         </include>
     </group>

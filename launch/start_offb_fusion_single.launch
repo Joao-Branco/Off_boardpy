@@ -37,9 +37,9 @@
 
 	<!-- Nodes to define target position based on computer vision algorithm -->
 
-	<!-- <include file="$(find offboard_py)/launch/sensor_camera.launch">
+	<include file="$(find offboard_py)/launch/sensor_camera.launch">
 		<arg name = "uav_id" value = "uav0"/>
-	</include> -->
+	</include>
 	<include file="$(find offboard_py)/launch/sensor_camera.launch">
 		<arg name = "uav_id" value = "uav1"/>
 	</include>

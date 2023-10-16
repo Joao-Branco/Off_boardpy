@@ -150,7 +150,7 @@ def image_publish_node():
 
 	image_pub = rospy.Publisher(uav_id + "/original_image_topic", Image, queue_size=1)
 
-	rate = rospy.Rate(10)
+	rate = rospy.Rate(5)
 
 	video = Video(uav_id_number= uav_id_number)
 	bridge = CvBridge()
