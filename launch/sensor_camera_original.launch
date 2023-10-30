@@ -12,9 +12,9 @@
 	<node pkg="offboard_py" type="georeferentiation_car.py" name="georeferentiation_car_$(arg uav_id)" required="True" output="screen">
 		<param name = "uav_id" value = "$(arg uav_id)"/>
 	</node>
-	<!-- <node pkg="offboard_py" type="kalman_filter.py" name="kalman_filter_$(arg uav_id)" required="True" output="screen">
+	<node pkg="offboard_py" type="kalman_filter.py" name="kalman_filter_$(arg uav_id)" required="True" output="screen">
 		<param name = "uav_id" value = "$(arg uav_id)"/>
-	</node> -->
+	</node>
 	
 
 

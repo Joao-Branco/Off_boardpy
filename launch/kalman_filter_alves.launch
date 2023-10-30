@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+
+
+	<node pkg="offboard_py" type="kalman_filter.py" name="kalman_filter" required="True" output="screen">
+		<param name = "uav_id" value = "uav0"/>
+	</node>
+
+
+
+
+
+</launch>

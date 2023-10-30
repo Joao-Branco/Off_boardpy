@@ -33,7 +33,7 @@ class YoloWrapper:
     def __init__(self):
 
         # setup subscriber and publishers
-        n_uavs = 10
+        n_uavs = 3
 
         self.uav_pubs = {}
         self.img_buffer = []

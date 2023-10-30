@@ -10,6 +10,7 @@ from mavros_msgs.srv import StreamRateRequest, StreamRate
 from tf.transformations import euler_from_quaternion
 from MARS_msgs.msg import TargetTelemetry
 from MARS_msgs.msg import target_info
+from std_msgs.msg import Float64
 import time
 import csv
 import os
@@ -139,7 +140,7 @@ class Inicializacao(object):
     def __init__(self):
         self.state = State()
         self.local_position = PoseStamped()  # fcu local position
-        self.rate = rospy.Rate(10)
+        self.rate = rospy.Rate(20)
         self.service_timeout = 30
         self.setup_pubsub()
         self.setup_services()
@@ -199,17 +200,19 @@ class Inicializacao(object):
         rospy.loginfo('setup mavros stream rate finished')
 
     def start(self):
-
         # wait to get heartbeat from fcu
         while not self.state.connected:
             self.rate.sleep()
         rospy.loginfo('--Got heartbeat from FCU----')
 
-        pub = rospy.Publisher(uav_id + "/target_position_geolocation", TargetTelemetry, queue_size=10)
+        pub = rospy.Publisher(uav_id + "/target_position_geolocation", TargetTelemetry, queue_size=1)
+        pub_lat = rospy.Publisher(uav_id + "/target_position_geolocation_lat", Float64, queue_size=1)
+
         
 
         while not rospy.is_shutdown():
             if self.target_2d_position is not None:
+                start_time = rospy.Time.now().to_nsec() * 1e-9
 
                 targets = self.target_2d_position.targets
 
@@ -287,13 +290,21 @@ class Inicializacao(object):
                     measurement_x = raw_target_3d_coordinate[1]  # valor east
                     measurement_y = raw_target_3d_coordinate[0]  # valor north
 
-                    print('GEO position x ', measurement_x[0])
-                    print('GEO position y ', measurement_y[0])
+                    # print('GEO position x ', measurement_x[0])
+                    # print('GEO position y ', measurement_y[0])
                 
                     target_position_geolocation_msg = TargetTelemetry()
 
                     target_position_geolocation_msg.x_pos = measurement_x[0]
                     target_position_geolocation_msg.y_pos = measurement_y[0]
+                    target_position_geolocation_msg.timestamp = rospy.Time.now()
+
+                    lat = rospy.Time.now().to_nsec() * 1e-9 - start_time
+                    print(lat)
+                    lat_msg = Float64()
+                    lat_msg.data = lat
+                    pub_lat.publish(lat_msg)
+
 
                     pub.publish(target_position_geolocation_msg)
 
@@ -341,7 +352,7 @@ class Inicializacao(object):
         self.vfr_hud = data
 
     def image_target_cb(self, data):
-        rospy.loginfo(f'got targets:{data.targets}')
+        # rospy.loginfo(f'got targets:{data.targets}')
         self.target_2d_position = data
 
 if __name__ == '__main__':

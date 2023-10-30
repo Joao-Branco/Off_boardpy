@@ -10,7 +10,7 @@ def run_qgroundcontrol():
         p = subprocess.Popen(['/home/jbranco/QGroundControl.AppImage'], shell= True)
 
         # Wait for 1 minute (60 seconds)
-        time.sleep(40)
+        time.sleep(50)
 
         # Kill the QGroundControl process
         #p.kill()

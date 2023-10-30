@@ -142,6 +142,7 @@ def setup_pub_sub(uav_id):
 	# TARGET #
 	# Creates the subscriber for the target position
 	target_sub = rospy.Subscriber(uav_id + "/target_position", TargetTelemetry, receive_target_cb) # Might change in the future, if the objective is to get the images from each UAV
+	#target_sub = rospy.Subscriber("/target_position", TargetTelemetry, receive_target_cb)
 
 
 	# VIRTUAL PARTICLES #

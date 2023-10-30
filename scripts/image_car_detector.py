@@ -62,8 +62,8 @@ class YoloWrapper:
                              ])"""
 
     def start(self):
-        pub = rospy.Publisher(uav_id + "/car_2d_position", target_info, queue_size=10)
-        pub_latencia = rospy.Publisher(uav_id + "/detector_lantency", Float64, queue_size=10)
+        pub = rospy.Publisher(uav_id + "/car_2d_position", target_info, queue_size=1)
+        pub_latencia = rospy.Publisher(uav_id + "/detector_lantency", Float64, queue_size=1)
         self.image_sub = rospy.Subscriber(uav_id + "/original_image_topic", RosImage, self.image_cb)
         #self.image_sub = rospy.Subscriber(uav_id + "/mavros/plane_video/camera/image_raw", RosImage, self.image_cb)
 
@@ -90,7 +90,7 @@ class YoloWrapper:
                 self.length = length + self.length_anterior
                 self.length_anterior = self.length
                 if len(self.target_list):
-                    print('entrei no len')
+                    #print('entrei no len')
                     self.n_detecao +=1
                     # for i in range(length):
                         # d = open("/home/mgfelix/catkin_ws/src/plot/simulation_data/detecoes_data.csv", "a")
@@ -135,7 +135,7 @@ class YoloWrapper:
 
 
     def callback(self):
-        rospy.loginfo("running yolo...\n\n\n\n")
+        #rospy.loginfo("running yolo...\n\n\n\n")
         self.out_pred, self.det_image = self.yolo.detect_image(self.image, show_stats=False)
         rospy.loginfo(type(self.det_image))
         im =np.array(self.det_image)
@@ -146,8 +146,8 @@ class YoloWrapper:
         self.target_list = []
         self.new_image = False
         y_size, x_size, _ = np.array(self.det_image).shape #resolucao da imagem
-        print(y_size)
-        print(x_size)
+        #print(y_size)
+        #print(x_size)
         n = 0
         for single_prediction in self.out_pred:
             msgf = self.convert_to_target(single_prediction)
@@ -155,10 +155,10 @@ class YoloWrapper:
                 self.target_list.append(msgf)
             else:
                 n +=1
-                rospy.logfatal('%s target under 0.6 of confidence',n)
+                #rospy.logfatal('%s target under 0.6 of confidence',n)
                 pass
 
-        print('full target', self.target_list)
+        #print('full target', self.target_list)
         self.num = n
         self.new_detection = True
 

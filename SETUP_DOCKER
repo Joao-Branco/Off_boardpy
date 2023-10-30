@@ -91,3 +91,12 @@ docker run --rm -it --privileged \
 --network host \
 -w /src/catkin_ws/ \
 px4io/px4-dev-ros-noetic bash
+
+
+rosrun image_view image_view image:=/uav0/original_image_topic __name:=image_view_0
+
+rosrun image_view image_view image:=/uav1/original_image_topic __name:=image_view_1
+
+rosrun image_view image_view image:=/uav0/car_2d_position/img __name:=image_view_0
+
+rosrun image_view image_view image:=/uav1/original_image_topic __name:=image_view_1

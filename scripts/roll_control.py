@@ -17,7 +17,9 @@ def roll_calculation(UAV_position, VFR, target, particle, delta_t):
 	target_vel = [target.vy, target.vx]
 	x_ref = target.y_pos
 	y_ref = target.x_pos
-
+	target_vel = [0, 0]
+	x_ref = 0
+	y_ref = 0
 	# UAV Position
 	x_actual = UAV_position.pose.position.y
 	y_actual = UAV_position.pose.position.x
@@ -62,15 +64,17 @@ def roll_calculation(UAV_position, VFR, target, particle, delta_t):
 
 	# Anti wind-up
 	integral_e = integral_e_previous + (e * delta_t)
-	if integral_e[0] > 0.5:
-		integral_e[0] = 0.5
-	elif integral_e[0] < -0.5:
-		integral_e[0] = -0.5
+	if integral_e[0] > 0.01:
+		integral_e[0] = 0.01
+	elif integral_e[0] < -0.01:
+		integral_e[0] = -0.01
 	
-	if integral_e[1] > 0.03:
-		integral_e[1] = 0.03
-	elif integral_e[1] < -0.03:
-		integral_e[1] = -0.03
+	if integral_e[1] > 0.005:
+		integral_e[1] = 0.005
+	elif integral_e[1] < -0.005:
+		integral_e[1] = -0.005
+
+
 
 	integral_e_previous = integral_e
 	integral_e[0] = 0
