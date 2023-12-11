@@ -1,6 +1,6 @@
 # Off_boardpy
 
-This is the package to run the SITL simulation
+This is the package to run the SITL simulation. To implement all CIAFA architecture see [Felix](https://github.com/mg-felix/sitl-simulations)
 
 # Install before start
 
@@ -17,9 +17,7 @@ Geographiclib
 sudo geographiclib-get-geoids egm96-5
 ```
 
-Push to scripts this git TrainYourOwnYolo
-
-https://github.com/AntonMu/TrainYourOwnYOLO
+Push to scripts this git [TrainYourOwnYolo](https://github.com/AntonMu/TrainYourOwnYOLO)
 
 Inside TrainYourOwnYOLO/Data/Model_Weights/ do the following command
 
